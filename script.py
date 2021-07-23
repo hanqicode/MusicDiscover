@@ -26,7 +26,7 @@ print("[Info] Start to discover your music...")
 1. Parse Youtube Music Library into a dictionary with song name and singer name;
 """
 # parse Youtube Music page
-soup = BeautifulSoup(open("/Users/qihan/Documents/Workplace/Python/Temp/parseYoutubeMusic/page.html"), "html.parser")
+soup = BeautifulSoup(open("/Users/qihan/Documents/Workplace/Python/Temp/musicDiscover/page.html"), "html.parser")
 rawSongs = soup.find_all("div", {"class": "flex-columns style-scope ytmusic-responsive-list-item-renderer"})
 # for each rawSong:
 #     index 1: song name
@@ -50,7 +50,7 @@ print("[Info] Step 1 completed! Get the song dictionary:")
 print("[Info] " + str(songDic))
 
 # TODO: Need to delete after debugging!
-songDic = dict(itertools.islice(songDic.items(), 3))
+songDic = dict(itertools.islice(songDic.items(), 4))
 print("[Debug] for debugging: " + str(songDic))
 
 """
@@ -61,12 +61,21 @@ songDatabase = {}  # {songName : {singer:Jay, composer: Jay, arranger: Jay}}
 for song, singer in songDic.items():
     # search song + singer and get baike pages
     query = song + " " + singer
+    print("[Debug] " + query + " querying...")
     queryResult = []
-    for i in search(query, 'com', 'en', str(10), str(0), 20, 2):
-        if "baike.baidu.com" in i:
-            queryResult.append(i)
+    for link in search(query,  # The query typed in Google search
+                       tld='com',  # The top level domain
+                       lang='en',  # The language
+                       num=10,  # Number of results per page
+                       start=0,  # First result to retrieve
+                       stop=20,  # Last result to retrieve
+                       pause=2.0,  # Lapse between HTTP requests
+                       ):
+        if "baike.baidu.com" in link:
+            queryResult.append(link)
 
     if not queryResult:
+        print("[Warn] Cannot find baike page for query: " + query)
         continue
 
     # parse baike page
@@ -93,7 +102,7 @@ for song, singer in songDic.items():
 
         basicInfoDic[name] = value
 
-    print(basicInfoDic)
+    # print("[Debug] " + query + ": " + str(basicInfoDic))
     # update song database
     songDatabase[song] = {}
     songDatabase[song]["singer"] = singer
@@ -106,4 +115,5 @@ for song, singer in songDic.items():
 
 print("[Info] Step 2 completed! Get the song database:")
 print("[Info] " + str(songDatabase))
+# [Info] {'原来你什么都不要': {'singer': '孙燕姿', 'composer': '郭子', 'arranger': 'Terence Teo'}, '一生中最爱 (电影《双城故事》歌曲)': {'singer': '谭咏麟', 'composer': '伍思凯', 'arranger': '卢东尼'}, '死性不改': {'singer': "Boy'z", 'composer': '张佳添'}}
 # do not delete me
