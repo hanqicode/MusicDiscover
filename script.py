@@ -16,7 +16,7 @@ Then find out all music made by those people.
 ## Action Items
 1. Parse Youtube Music Library into a dictionary with song name and singer name;
 2. Search on the Internet with the identifiers(song name and singer name);
-3. Parse and get the composer and arranger
+3. Parse and get the composer and arranger;
 4. Search on the Internet for songs with singers, composers and arrangers;
 5. Listen and find out what you like;
 """
@@ -51,10 +51,11 @@ print("[Info] " + str(songDic))
 
 # TODO: Need to delete after debugging!
 songDic = dict(itertools.islice(songDic.items(), 4))
-print("[Debug] for debugging: " + str(songDic))
+# print("[Debug] for debugging: " + str(songDic))
 
 """
 2. Search on the Internet with the identifiers(song name and singer name);
+3. Parse and get the composer and arranger;
 """
 songDatabase = {}  # {songName : {singer:Jay, composer: Jay, arranger: Jay}}
 
@@ -102,18 +103,17 @@ for song, singer in songDic.items():
 
         basicInfoDic[name] = value
 
-    # print("[Debug] " + query + ": " + str(basicInfoDic))
     # update song database
     songDatabase[song] = {}
     songDatabase[song]["singer"] = singer
 
     for key, value in basicInfoDic.items():
-        if key == "谱曲":
+        if key == "谱曲" or key == "作曲":
             songDatabase[song]["composer"] = value
         elif key == "编曲":
             songDatabase[song]["arranger"] = value
 
-print("[Info] Step 2 completed! Get the song database:")
+print("[Info] Step 2 and 3 completed! Get the song database:")
 print("[Info] " + str(songDatabase))
-# [Info] {'原来你什么都不要': {'singer': '孙燕姿', 'composer': '郭子', 'arranger': 'Terence Teo'}, '一生中最爱 (电影《双城故事》歌曲)': {'singer': '谭咏麟', 'composer': '伍思凯', 'arranger': '卢东尼'}, '死性不改': {'singer': "Boy'z", 'composer': '张佳添'}}
+# songDatabase: {'原来你什么都不要': {'singer': '孙燕姿', 'composer': '郭子', 'arranger': 'Terence Teo'}}
 # do not delete me
