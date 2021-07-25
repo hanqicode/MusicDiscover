@@ -10,7 +10,7 @@ import time
 5. Save composer and arranger into database;
 """
 # read songs from database
-db = mysql.connector.connect(user='root', password='your_password', database='music_discover')
+db = mysql.connector.connect(user='root', password='19921230', database='music_discover')
 reader = db.cursor(buffered=True)
 writer = db.cursor()
 readSql = "SELECT * " + \
